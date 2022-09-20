@@ -1,29 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
-function ClickedBtn() {
-    const [items, setItems] = useState([0, 1]);
-    const [hoverItem, setHoverItem] = useState('none')
-    const addBtn = () => {
-        setItems(items => [...items, items.length]);
+function Info() {
+    const [count, setCount] = useState(0);
+    const [x, setX] = useState(0);
+    const [y, setY] = useState(0)
+
+
+    const Clicked = () => {
+        setCount(count + 1)
     }
-    const hovered = (e) => {
-        setHoverItem(e.target.childNodes[1].textContent)
-    }
-    const notHover = () => {
-        setHoverItem('none');
-    }
+
+    useEffect(() => {
+        document.onmousemove = function (e) {
+            setX(e.pageX)
+            setY(e.pageY)
+        }
+    })
+
     return (
         <div className='wrapper'>
-            <button onClick={addBtn}>Add</button>
-            <p>Clicked button number: <span>{hoverItem}</span> </p>
-            <ul>
-                {items.map((item, index) =>
-                    <li key={index} onMouseOver={hovered} onMouseLeave={notHover}>Item <span>{item}</span></li>
-                )}
-            </ul>
-
+            <p>You clicked <span>{count}</span> times</p>
+            <button onClick={Clicked}>Click me</button>
+            <p>X position: <span>{x}</span></p>
+            <p>Y position: <span>{y}</span></p>
         </div>
     )
 }
@@ -31,7 +32,7 @@ function ClickedBtn() {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <ClickedBtn />
+        <Info />
     </React.StrictMode>
 );
 
